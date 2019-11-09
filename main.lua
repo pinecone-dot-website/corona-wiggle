@@ -6,6 +6,7 @@ local dragable = require "com.ponywolf.dragable"
 local vjoy = require "com.ponywolf.vjoy"
 
 physics.start()
+physics.setGravity(0, 20)
 
 local floor = display.newRect(240, 320, display.actualContentWidth, 50)
 floor:setFillColor(0.2, 0.2, 1)
@@ -14,7 +15,6 @@ physics.addBody(floor, "static", {bounce = .5})
 local ceil = display.newRect(240, 0, display.actualContentWidth, 50)
 ceil:setFillColor(0.2, 0.2, 1)
 physics.addBody(ceil, "static", {bounce = .5})
-
 
 local wall_left = display.newRect(display.contentWidth - display.actualContentWidth + 50, display.actualContentHeight/2, 50, display.actualContentHeight)
 wall_left:setFillColor(0.2, 0.2, 1)
@@ -25,23 +25,34 @@ wall_right:setFillColor(0.2, 0.2, 1)
 physics.addBody(wall_right, "static", {bounce = .5})
 
 local bodies = {
-    display.newCircle(100, 200, 14),
-    display.newCircle(100, 210, 16),
-    display.newCircle(100, 220, 14),
-    display.newCircle(100, 230, 12),
-    display.newCircle(100, 240, 10)
+    -- display.newCircle(100, 200, 6),
+    display.newCircle(110, 200, 8),
+    display.newCircle(120, 200, 10),
+    display.newCircle(130, 200, 12),
+    display.newCircle(140, 200, 14),
+    display.newCircle(140, 200, 16),
+    display.newCircle(150, 200, 14),
+    display.newCircle(160, 200, 12),
+    display.newCircle(170, 200, 10),
+    display.newCircle(180, 200, 8),
+    -- display.newCircle(190, 200, 6)
 }
 
-for i = 1, #bodies do
-    if (i == 3) then
+local body_count =  #bodies
+local body_half = math.ceil(body_count/2)
+print(body_half)
+
+for i = 1, body_count do
+    bodies[i]:setFillColor(1,0,0,.5)
+    if (i == body_half) then
         -- dragable.new(bodies[i])
         -- center
         physics.addBody(
             bodies[i],
             "dynamic",
             {
-                bounce = 1,
-                density = 2
+                bounce = .5,
+                density = 5
             }
         )
     else
@@ -49,7 +60,7 @@ for i = 1, #bodies do
             bodies[i],
             "dynamic",
             {
-                bounce = .5,
+                bounce = .75,
                 density = 1
             }
         )
@@ -57,7 +68,7 @@ for i = 1, #bodies do
 
     if (i ~= 1) then
         local j = physics.newJoint("rope", bodies[i - 1], bodies[i], 0, 0, 0, 0)
-        j.maxLength = 14
+        j.maxLength = 22
     end
 
     if (i == 3) then
@@ -90,7 +101,7 @@ local function keyDown(event)
     if (event.phase == "down") then
         -- right
         if (event.keyName == "space") then
-            bodies[3]:applyForce(axis[1] * 2000, axis[2] * 2000, bodies[3].x, bodies[3].y)
+            bodies[3]:applyForce(axis[1] * 2000, axis[2] * 2000, bodies[body_half].x, bodies[body_half].y)
         end
     end
 end
