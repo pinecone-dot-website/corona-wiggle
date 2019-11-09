@@ -1,5 +1,4 @@
-
-system.activate( "multitouch" )
+system.activate("multitouch")
 
 local physics = require "physics"
 local dragable = require "com.ponywolf.dragable"
@@ -16,59 +15,55 @@ local ceil = display.newRect(240, 0, display.actualContentWidth, 50)
 ceil:setFillColor(0.2, 0.2, 1)
 physics.addBody(ceil, "static", {bounce = .5})
 
-local wall_left = display.newRect(display.contentWidth - display.actualContentWidth + 50, display.actualContentHeight/2, 50, display.actualContentHeight)
+local wall_left =
+    display.newRect(
+    display.contentWidth - display.actualContentWidth + 50,
+    display.actualContentHeight / 2,
+    50,
+    display.actualContentHeight
+)
 wall_left:setFillColor(0.2, 0.2, 1)
 physics.addBody(wall_left, "static", {bounce = .5})
 
-local wall_right = display.newRect(display.actualContentWidth - 50, display.actualContentHeight/2, 50, display.actualContentHeight)
+local wall_right =
+    display.newRect(display.actualContentWidth - 50, display.actualContentHeight / 2, 50, display.actualContentHeight)
 wall_right:setFillColor(0.2, 0.2, 1)
 physics.addBody(wall_right, "static", {bounce = .5})
 
-local bodies = {
-    -- display.newCircle(100, 200, 6),
-    display.newCircle(110, 200, 8),
-    display.newCircle(120, 200, 10),
-    display.newCircle(130, 200, 12),
-    display.newCircle(140, 200, 14),
-    display.newCircle(140, 200, 16),
-    display.newCircle(150, 200, 14),
-    display.newCircle(160, 200, 12),
-    display.newCircle(170, 200, 10),
-    display.newCircle(180, 200, 8),
-    -- display.newCircle(190, 200, 6)
+local bodies = {}
+
+local body_dims = {
+    start_radius = 4,
+    mid_radius = 12,
+    units_count = 7
 }
 
-local body_count =  #bodies
-local body_half = math.ceil(body_count/2)
-print(body_half)
+local body_half = math.ceil(body_dims.units_count / 2)
 
-for i = 1, body_count do
-    bodies[i]:setFillColor(1,0,0,.5)
-    if (i == body_half) then
-        -- dragable.new(bodies[i])
-        -- center
-        physics.addBody(
-            bodies[i],
-            "dynamic",
-            {
-                bounce = .5,
-                density = 5
-            }
-        )
-    else
-        physics.addBody(
-            bodies[i],
-            "dynamic",
-            {
-                bounce = .75,
-                density = 1
-            }
-        )
-    end
+print("start!")
+for i = 1, body_dims.units_count do
+    local increment = (body_dims.mid_radius - body_dims.start_radius) / body_dims.units_count
+    local arc = math.abs(i - body_half)
+    local radius = body_dims.mid_radius - (arc * increment)
+
+    print("arc", arc)
+    print("radius", radius)
+
+    bodies[i] = display.newCircle(100, 200, radius)
+    bodies[i]:setFillColor(1, 0, 0, .5)
+
+    physics.addBody(
+        bodies[i],
+        "dynamic",
+        {
+            bounce = .75,
+            density = radius
+        }
+    )
 
     if (i ~= 1) then
         local j = physics.newJoint("rope", bodies[i - 1], bodies[i], 0, 0, 0, 0)
-        j.maxLength = 22
+        j.maxLength = radius * 2
     end
 
     if (i == 3) then
@@ -84,8 +79,8 @@ local axis = {
 local function onAxis(event)
     axis[event.axis.number] = event.normalizedValue
 
-    -- local angle = math.deg(math.atan2(axis[1], axis[2]))
-    -- print("onAxis", event.axis.number, event.normalizedValue, angle)
+    local angle = math.deg(math.atan2(axis[1], axis[2]))
+    print("onAxis", event.axis.number, event.normalizedValue, math.floor(angle))
 end
 Runtime:addEventListener("axis", onAxis)
 
@@ -96,12 +91,19 @@ local btn_space = vjoy.newButton("space", 20)
 btn_space.x, btn_space.y = display.actualContentWidth - 80, display.actualContentHeight - 40
 
 local function keyDown(event)
-    -- print("player keyDown event.keyName", event.keyName)
+    print("player keyDown event.keyName", event.keyName)
 
     if (event.phase == "down") then
         -- right
-        if (event.keyName == "space") then
-            bodies[3]:applyForce(axis[1] * 2000, axis[2] * 2000, bodies[body_half].x, bodies[body_half].y)
+        if (event.keyName == "space" or event.keyName == "button1") then
+            bodies[1]:applyForce(axis[1] * 10000, axis[2] * 10000, bodies[1].x, bodies[1].y)
+            bodies[body_half]:applyForce(axis[1] * 30000, axis[2] * 30000, bodies[body_half].x, bodies[body_half].y)
+            bodies[body_dims.units_count]:applyForce(
+                axis[1] * 10000,
+                axis[2] * 10000,
+                bodies[body_dims.units_count].x,
+                bodies[body_dims.units_count].y
+            )
         end
     end
 end
