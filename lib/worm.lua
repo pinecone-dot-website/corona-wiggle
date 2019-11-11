@@ -10,6 +10,7 @@ function M.new(body_dims)
 
     local bodies = {}
     local body_half = math.ceil(body_dims.units_count / 2)
+    local body_interval = math.ceil(body_half / 2)
 
     -- worm has 3 points in body that accelerate
     local can_jump = {
@@ -26,7 +27,7 @@ function M.new(body_dims)
 
     --
     local force = {
-        tail = (((body_dims.start_radius + body_dims.mid_radius) / 2) * body_dims.units_count) / 4,
+        tail = (((body_dims.start_radius + body_dims.mid_radius) / 2) * body_dims.units_count) / 1,
         mid = (body_dims.mid_radius + body_dims.start_radius) * 100
     }
 
@@ -52,10 +53,10 @@ function M.new(body_dims)
             bodies[i],
             "dynamic",
             {
-                bounce = .5,
-                density = 1,
+                bounce = 0,
+                density = 2,
                 friction = 1,
-                radius = radius / 1
+                radius = radius / 2
             }
         )
 
@@ -75,15 +76,15 @@ function M.new(body_dims)
             -- right
             if (event.keyName == "space" or event.keyName == "button1" or event.keyName == "buttonB") then
                 if (can_jump[1]) then
-                    pulseBody(bodies[4], axis[1], axis[2] * 2, force.tail)
+                    pulseBody(bodies[body_interval], axis[1] * 4, axis[2] * 2, force.tail)
                 end
 
                 if (can_jump[2]) then
-                    pulseBody(bodies[body_half], axis[1], axis[2] * 4, force.mid)
+                    pulseBody(bodies[body_half], axis[1], axis[2] * 2 , force.mid)
                 end
 
                 if (can_jump[3]) then
-                    pulseBody(bodies[body_dims.units_count - 3], axis[1], axis[2] * 2, force.tail)
+                    pulseBody(bodies[body_dims.units_count - body_interval], axis[1] * 4, axis[2]* 2, force.tail)
                 end
             end
         end

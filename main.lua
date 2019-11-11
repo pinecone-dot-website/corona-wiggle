@@ -17,11 +17,11 @@ local floor_dims = {
     friction = 1
 }
 
-local floor = display.newRect(240, 320, display.actualContentWidth, 50)
+local floor = display.newRect(240, 320, display.actualContentWidth, 20)
 floor:setFillColor(0.2, 0.2, 1)
 physics.addBody(floor, "static", floor_dims)
 
-local ceil = display.newRect(240, 0, display.actualContentWidth, 50)
+local ceil = display.newRect(240, 0, display.actualContentWidth, 20)
 ceil:setFillColor(0.2, 0.2, 1)
 physics.addBody(ceil, "static", floor_dims)
 
@@ -32,33 +32,33 @@ local wall_dims = {
 }
 local wall_left =
     display.newRect(
-    display.contentWidth - display.actualContentWidth + 50,
+    display.contentWidth - display.actualContentWidth +40 ,
     display.actualContentHeight / 2,
-    50,
+    40,
     display.actualContentHeight
 )
 wall_left:setFillColor(0.2, 0.2, 1)
 physics.addBody(wall_left, "static", wall_dims)
 
 local wall_right =
-    display.newRect(display.actualContentWidth - 50, display.actualContentHeight / 2, 50, display.actualContentHeight)
+    display.newRect(display.actualContentWidth - 40, display.actualContentHeight / 2, 40, display.actualContentHeight)
 wall_right:setFillColor(0.2, 0.2, 1)
 physics.addBody(wall_right, "static", wall_dims)
 
 local worm = require("lib.worm")
 local body_dims = {
-    start_radius = 2,
-    mid_radius = 14,
-    units_count = 33
+    start_radius = 1,
+    mid_radius = 17,
+    units_count = 31
 }
 
 player = worm.new(body_dims)
 
-local joy = vjoy.newStick(1, 20, 40)
-joy.x, joy.y = 10, display.actualContentHeight - 40
+-- local joy = vjoy.newStick(1, 20, 40)
+-- joy.x, joy.y = 10, display.actualContentHeight - 40
 
-local btn_space = vjoy.newButton("space", 20)
-btn_space.x, btn_space.y = display.actualContentWidth - 80, display.actualContentHeight - 40
+-- local btn_space = vjoy.newButton("space", 20)
+-- btn_space.x, btn_space.y = display.actualContentWidth - 80, display.actualContentHeight - 40
 
 -- local function onLocalCollision(self, event)
 --     if (event.other == bodies[1]) then

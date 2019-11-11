@@ -12,6 +12,15 @@ function M.new(ball_dims)
 
     ball.gravityScale = ball_dims.gravityScale
 
+    local function enterFrame()
+        -- print( ball:getLinearVelocity() )
+        if (ball:getLinearVelocity() > 100) then
+            ball:setLinearVelocity(75)
+        end
+    end
+
+    Runtime:addEventListener("enterFrame", enterFrame)
+
     return ball
 end
 
