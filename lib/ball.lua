@@ -14,8 +14,9 @@ function M.new(ball_dims)
 
     local function enterFrame()
         -- print( ball:getLinearVelocity() )
-        if (ball:getLinearVelocity() > 100) then
-            ball:setLinearVelocity(75)
+        local v = ball:getLinearVelocity()
+        if ( v > 200) then
+            ball:setLinearVelocity(v-1)
         end
     end
 
