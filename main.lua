@@ -7,19 +7,21 @@ local dragable = require "com.ponywolf.dragable"
 local vjoy = require "com.ponywolf.vjoy"
 
 physics.start()
-physics.setGravity(0, 100)
+physics.setGravity(0, 40)
 -- physics.setGravity(0, 100)
 -- physics.setDrawMode( "hybrid" )
 
 -- floor and ceiling
 local floor_dims = {
-    bounce = 0,
+    bounce = 1,
     friction = 1
 }
 
 local floor = display.newRect(240, 320, display.actualContentWidth, 20)
 floor:setFillColor(0.2, 0.2, 1)
 physics.addBody(floor, "static", floor_dims)
+
+floor.rotation = 1
 
 local ceil = display.newRect(240, 0, display.actualContentWidth, 20)
 ceil:setFillColor(0.2, 0.2, 1)
@@ -32,7 +34,7 @@ local wall_dims = {
 }
 local wall_left =
     display.newRect(
-    display.contentWidth - display.actualContentWidth +40 ,
+    display.contentWidth - display.actualContentWidth + 40,
     display.actualContentHeight / 2,
     40,
     display.actualContentHeight
@@ -47,9 +49,9 @@ physics.addBody(wall_right, "static", wall_dims)
 
 local worm = require("lib.worm")
 local body_dims = {
-    start_radius = 1,
-    mid_radius = 17,
-    units_count = 31
+    start_radius = 10,
+    mid_radius = 15,
+    units_count = 11
 }
 
 player = worm.new(body_dims)
@@ -78,32 +80,36 @@ player = worm.new(body_dims)
 -- floor:addEventListener("collision")
 
 local _ball = require("lib.ball")
-local ball_dims = {
-    color = {.81, .32, 0},
-    gravityScale = 0,
-    physics = {
-        bounce = 1,
-        density = 10,
-        friction = 1,
-        radius = 10
-    },
-    radius = 20,
-    start_x = 400,
-    start_y = 100
-}
+ball_1 =
+    _ball.new(
+    {
+        color = {.81, .32, 0},
+        gravityScale = .1,
+        physics = {
+            bounce = 1,
+            density = .5,
+            friction = 1,
+            radius = 20
+        },
+        radius = 20,
+        start_x = 400,
+        start_y = 100
+    }
+)
 
-local ball = _ball.new(ball_dims)
-
-ball_2 = _ball.new({
-    color = {.81, .32, 0},
-    gravityScale = .25,
-    physics = {
-        bounce = 1,
-        density = 5,
-        friction = 1,
-        radius = 10
-    },
-    radius = 20,
-    start_x = 400,
-    start_y = 200
-})
+ball_2 =
+    _ball.new(
+    {
+        color = {.32, 0, .81},
+        gravityScale = .1,
+        physics = {
+            bounce = 1,
+            density = .5,
+            friction = 1,
+            radius = 20
+        },
+        radius = 20,
+        start_x = 400,
+        start_y = 200
+    }
+)
