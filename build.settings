@@ -13,6 +13,16 @@ settings =
 		supported = { "landscapeRight", },
 	},
 
+	 window =
+    {
+        defaultMode = "fullscreen",
+		   enableMaximizeButton = true,
+		resizable = true,
+		suspendWhenMinimized = true,
+    },  
+
+	win32 = {},
+
 	--
 	-- Android section
 	--
