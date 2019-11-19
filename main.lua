@@ -65,7 +65,7 @@ local worm = require("lib.worm")
 local body_dims = {
     start_radius = 3,
     mid_radius = 11,
-    units_count = 59
+    units_count = 19
 }
 
 player = worm.new(body_dims)

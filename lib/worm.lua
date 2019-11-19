@@ -73,14 +73,14 @@ function M.new(body_dims)
                 bounce = 0,
                 density = 1, --(i / body_dims.units_count) * i,
                 friction = 0,
-                radius = radius / 2
+                radius = radius 
             }
         )
 
         -- add rope joint
         if (i ~= 1) then
             local j = physics.newJoint("rope", bodies[i - 1], bodies[i], 0, 0, 0, 0)
-            j.maxLength = (bodies[i].radius + bodies[i].radius) / 2
+            j.maxLength = (bodies[i].radius + bodies[i].radius)
         end
 
         worm:insert(bodies[i])
