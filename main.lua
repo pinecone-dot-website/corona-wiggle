@@ -49,9 +49,9 @@ physics.addBody(wall_right, "static", wall_dims)
 
 local worm = require("lib.worm")
 local body_dims = {
-    start_radius = 10,
-    mid_radius = 15,
-    units_count = 11
+    start_radius = 3,
+    mid_radius = 11,
+    units_count = 59
 }
 
 player = worm.new(body_dims)

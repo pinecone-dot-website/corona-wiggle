@@ -8,6 +8,8 @@ local M = {}
 function M.new(body_dims)
     print(body_dims)
 
+    local worm = display.newGroup()
+
     local bodies = {}
     local body_half = math.ceil(body_dims.units_count / 2)
     local body_interval = math.ceil(body_half / 2)
@@ -80,6 +82,8 @@ function M.new(body_dims)
             local j = physics.newJoint("rope", bodies[i - 1], bodies[i], 0, 0, 0, 0)
             j.maxLength = (bodies[i].radius + bodies[i].radius)
         end
+
+        worm:insert(bodies[i])
     end
 
     local function pulseBody(body, x_val, y_val, force)
@@ -126,7 +130,7 @@ function M.new(body_dims)
     local function onFrame(event)
         for i = 2, body_dims.units_count do
             local c = bodies[i].color
-            local r = bodies[i].radius
+            local r = math.min(bodies[i].radius, bodies[i - 1].radius)
 
             -- draw lines connecting center point of each circle
             display.remove(connectors[i])
@@ -136,13 +140,15 @@ function M.new(body_dims)
             -- connectors[i]:setStrokeColor(1, 0, 0, .25)
             connectors[i]:setStrokeColor(unpack(c))
             connectors[i].strokeWidth = r * 2
+            worm:insert(connectors[i])
+            --
+            bodies[i]:toBack()
+            connectors[i]:toBack()
 
             -- draw line at right angle
 
             -- local angle =
             --     math.deg(math.atan2((bodies[i].y - bodies[i - 1].y) / 2, (bodies[i].x + bodies[i - 1].x)) / 2) + 90
-
-
 
             -- local pt_a = {
             --     x = ((bodies[i].x + bodies[i - 1].x) / 2) + (r * math.cos(angle)),
@@ -159,17 +165,18 @@ function M.new(body_dims)
             -- body_units[i].strokeWidth = 2
         end
 
-        for i = 2, body_dims.units_count do
-            local r = bodies[i].radius
+        -- for i = 2, body_dims.units_count do
+        --     local c = bodies[i - 1].color
+        --     local r = bodies[i - 1].radius
 
-            local pt_half = {
-                x = (bodies[i].x + bodies[i - 1].x) / 2,
-                y = (bodies[i].y + bodies[i - 1].y) / 2
-            }
-            body_units[i] = display.newCircle(pt_half.x, pt_half.y, r / 2)
-            -- body_units[i]:setFillColor(unpack(c))
-            body_units[i]:setFillColor(.9, .7, .5, .1)
-        end
+        --     local pt_half = {
+        --         x = bodies[i].x, --(bodies[i].x + bodies[i - 1].x) / 2,
+        --         y = bodies[i].y --(bodies[i].y + bodies[i - 1].y) / 2
+        --     }
+        --     body_units[i] = display.newCircle(pt_half.x, pt_half.y, math.min(r, bodies[i].radius))
+        --     --body_units[i]:setFillColor(unpack(c))
+        --     body_units[i]:setFillColor(1, 1, 1, .1)
+        -- end
     end
     Runtime:addEventListener("enterFrame", onFrame)
 end
