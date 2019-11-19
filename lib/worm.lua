@@ -73,14 +73,14 @@ function M.new(body_dims)
                 bounce = 0,
                 density = 1, --(i / body_dims.units_count) * i,
                 friction = 0,
-                radius = radius
+                radius = radius / 2
             }
         )
 
         -- add rope joint
         if (i ~= 1) then
             local j = physics.newJoint("rope", bodies[i - 1], bodies[i], 0, 0, 0, 0)
-            j.maxLength = (bodies[i].radius + bodies[i].radius)
+            j.maxLength = (bodies[i].radius + bodies[i].radius) / 2
         end
 
         worm:insert(bodies[i])
@@ -102,15 +102,15 @@ function M.new(body_dims)
             -- right
             if (event.keyName == "space" or event.keyName == "button1" or event.keyName == "buttonB") then
                 if (can_jump[1]) then
-                    pulseBody(bodies[jump_units[1]], axis[1] * 4, axis[2] * 4, force.tail)
+                    pulseBody(bodies[jump_units[1]], axis[1] * 2, axis[2] * 1, force.tail)
                 end
 
                 if (can_jump[2]) then
-                    pulseBody(bodies[jump_units[2]], axis[1] * 4, axis[2] * 4, force.mid)
+                    pulseBody(bodies[jump_units[2]], axis[1] * 1, axis[2] * 1, force.mid)
                 end
 
                 if (can_jump[3]) then
-                    pulseBody(bodies[jump_units[3]], axis[1] * 4, axis[2] * 4, force.tail)
+                    pulseBody(bodies[jump_units[3]], axis[1] * 2, axis[2] * 1, force.tail)
                 end
             end
         end

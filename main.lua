@@ -7,7 +7,7 @@ local dragable = require "com.ponywolf.dragable"
 local vjoy = require "com.ponywolf.vjoy"
 
 physics.start()
-physics.setGravity(0, 40)
+physics.setGravity(0, 80)
 -- physics.setGravity(0, 100)
 -- physics.setDrawMode( "hybrid" )
 
@@ -17,14 +17,18 @@ local floor_dims = {
     friction = 1
 }
 
-local floor = display.newRect(240, 320, display.actualContentWidth, 20)
-floor:setFillColor(0.2, 0.2, 1)
-physics.addBody(floor, "static", floor_dims)
+local floor_l = display.newRect(60, 0, display.actualContentWidth / 2, 10)
+floor_l:setFillColor(0.2, 0.2, 1)
+physics.addBody(floor_l, "static", floor_dims)
 
-floor.rotation = 1
+local floor_r = display.newRect(display.actualContentWidth - 140, 0, display.actualContentWidth / 2, 10)
+floor_r:setFillColor(0.2, 0.2, 1)
+physics.addBody(floor_r, "static", floor_dims)
 
-local ceil = display.newRect(240, 0, display.actualContentWidth, 20)
-ceil:setFillColor(0.2, 0.2, 1)
+-- floor.rotation = 1
+
+local ceil = display.newRect(240, 320, display.actualContentWidth, 10)
+ceil:setFillColor(0.6, 0.2, 1)
 physics.addBody(ceil, "static", floor_dims)
 
 -- side walls
@@ -32,19 +36,29 @@ local wall_dims = {
     bounce = .5,
     friction = .5
 }
+
+-- display.contentWidth = 480
+-- display.actualContentWidth = 568
+local win_width_offset = (display.actualContentWidth - display.contentWidth) / -2 -- -44 
+
 local wall_left =
     display.newRect(
-    display.contentWidth - display.actualContentWidth + 40,
+        win_width_offset,
     display.actualContentHeight / 2,
-    40,
+    10,
     display.actualContentHeight
 )
-wall_left:setFillColor(0.2, 0.2, 1)
+wall_left:setFillColor(0.6, 0.6, 1)
 physics.addBody(wall_left, "static", wall_dims)
 
 local wall_right =
-    display.newRect(display.actualContentWidth - 40, display.actualContentHeight / 2, 40, display.actualContentHeight)
-wall_right:setFillColor(0.2, 0.2, 1)
+    display.newRect(
+        display.actualContentWidth + win_width_offset, 
+        display.actualContentHeight / 2, 
+        10, 
+        display.actualContentHeight
+    )
+wall_right:setFillColor(0.6, 0.6, 1)
 physics.addBody(wall_right, "static", wall_dims)
 
 local worm = require("lib.worm")
