@@ -16,13 +16,6 @@ function M.new(body_dims)
     local body_units = {}
     local connectors = {}
 
-    -- worm has 3 points in body that accelerate
-    local can_jump = {
-        1,
-        1,
-        1
-    }
-
     --
     local axis = {
         0,
@@ -73,7 +66,7 @@ function M.new(body_dims)
                 bounce = 0,
                 density = 1, --(i / body_dims.units_count) * i,
                 friction = 0,
-                radius = radius 
+                radius = radius
             }
         )
 
@@ -95,32 +88,28 @@ function M.new(body_dims)
         body_half,
         body_dims.units_count - body_interval + 1
     }
+
     print("jump_units", jump_units[1], jump_units[2], jump_units[3])
+
     local function keyDown(event)
         -- print(event.keyName)
         if (event.phase == "down") then
-            -- right
-            if (event.keyName == "space" or event.keyName == "button1" or event.keyName == "buttonB") then
-                if (can_jump[1]) then
-                    pulseBody(bodies[jump_units[1]], axis[1] * 2, axis[2] * 1, force.tail)
-                end
+            -- if (event.keyName == "space" or event.keyName == "button1" or event.keyName == "buttonB") then
+            pulseBody(bodies[jump_units[1]], axis[1] * 2, axis[2] * 1, force.tail)
 
-                if (can_jump[2]) then
-                    pulseBody(bodies[jump_units[2]], axis[1] * 1, axis[2] * 1, force.mid)
-                end
+            pulseBody(bodies[jump_units[2]], axis[1] * 1, axis[2] * 1, force.mid)
 
-                if (can_jump[3]) then
-                    pulseBody(bodies[jump_units[3]], axis[1] * 2, axis[2] * 1, force.tail)
-                end
-            end
+            pulseBody(bodies[jump_units[3]], axis[1] * 2, axis[2] * 1, force.tail)
+        -- end
         end
     end
 
     Runtime:addEventListener("key", keyDown)
 
     local function onAxis(event)
-        -- print(event.axis.number, event.normalizedValue)
-        axis[event.axis.number] = event.normalizedValue
+        local _index = ((event.axis.number - 1) % 2) + 1    -- 1 or 2
+        -- print(event.axis.number, _index)
+        axis[_index] = event.normalizedValue
 
         local angle = math.deg(math.atan2(axis[1], axis[2]))
         -- print("onAxis", event.axis.number, event.normalizedValue, math.floor(angle))
